@@ -27,18 +27,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // PIDF (regular Motion Magic, not Expo)
     private static final double kS = 0.25;   // V, static
-    private static final double kV = 0.12;   // V per rps
-    private static final double kA = 0.01;   // V per rps^2
-    private static final double kP = 4.8;
+    private static final double kV = 9.5;   // V per rps
+    private static final double kA = 0.2;   // V per rps^2
+    private static final double kP = 0.0;
     private static final double kI = 0.0;
-    private static final double kD = 0.10;
+    private static final double kD = 0.0;
 
     // Gravity feedforward so it holds position without fighting with P
     private static final double kG = 0.5;    // V to hold. Start ~0.3–0.8, tune on-robot
 
     // Motion Magic constraints
-    private static final double CRUISE_VEL_RPS = 80.0;   // rot/s
-    private static final double ACCEL_RPS2    = 160.0;   // rot/s^2
+    private static final double CRUISE_VEL_RPS = 5.5;   // rot/s
+    private static final double ACCEL_RPS2    = 5.5;   // rot/s^2
     private static final double JERK_RPS3     = 800.0;   // rot/s^3 start conservative; try 1200–1600 if you want snappier ramps
 
     // Position presets (in rotations of the configured unit)

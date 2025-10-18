@@ -89,7 +89,7 @@ import frc.robot.generated.TunerConstants;
 
             //L2
             joystick.b().onTrue(
-                Commands.sequence(ElevatorCommands.goToLevel2(elevator))
+                Commands.sequence(ElevatorCommands.goToLevel1(elevator))
             );
         }        
 
