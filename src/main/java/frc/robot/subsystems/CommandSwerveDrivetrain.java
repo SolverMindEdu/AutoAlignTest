@@ -17,6 +17,9 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.FlippingUtil;
 
@@ -28,6 +31,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -70,6 +74,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0), new Rotation3d(0, 10, 0));;
     private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
 
+    private final Pose2d[] scoringPositionsBlue = {
+        new Pose2d(1.5, 1.0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(1.5, 2.0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(1.5, 3.0, Rotation2d.fromDegrees(0)), 
+        new Pose2d(1.5, 4.0, Rotation2d.fromDegrees(0))
+    };
+
+    private final Pose2d[] scoringPositionsRed = {
+        new Pose2d(20, -14, Rotation2d.fromDegrees(0)),
+        new Pose2d(20, -14, Rotation2d.fromDegrees(0)),
+        new Pose2d(20, -14, Rotation2d.fromDegrees(0)), 
+        new Pose2d(20, -14, Rotation2d.fromDegrees(0))
+    };
+
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -101,6 +119,46 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             this
         )
     );
+
+    
+    // public Pose2d getPose() {
+    //     return getState().Pose;
+    // }    
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return getState().Speeds;
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        setControl(new SwerveRequest.ApplyChassisSpeeds().withSpeeds(speeds));
+    }
+
+    private void configureAutoBuilder() {
+        RobotConfig config;
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        
+        AutoBuilder.configure(
+            this::getPose,
+            this::resetPose,
+            this::getRobotRelativeSpeeds,
+            (speeds, feedforwards) -> driveRobotRelative(speeds),
+            new PPHolonomicDriveController(
+                new PIDConstants(5.0, 0.0, 0.0), // Translation PID
+                new PIDConstants(5.0, 0.0, 0.0)  // Rotation PID
+            ),
+            config,
+            () -> {
+                var alliance = DriverStation.getAlliance();
+                return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+            },
+            this
+        );
+    }
 
     /*
      * SysId routine for characterizing rotation.
@@ -151,6 +209,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         generatePoseArray();
+        configureAutoBuilder();  
     }
 
     /**
@@ -176,6 +235,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         generatePoseArray();
+        configureAutoBuilder();  
     }
 
     /**
@@ -209,6 +269,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         generatePoseArray();
+        configureAutoBuilder();  
     }
 
     /**
@@ -481,7 +542,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command driveToPose(Pose2d pose) {
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
-            0.5, 0.5,
+            1, 1,
             RotationsPerSecond.of(0.6).in(RadiansPerSecond), Units.degreesToRadians(720));
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
