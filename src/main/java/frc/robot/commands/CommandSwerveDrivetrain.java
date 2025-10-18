@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -73,20 +73,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
     private Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0), new Rotation3d(0, 10, 0));;
     private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
-
-    private final Pose2d[] scoringPositionsBlue = {
-        new Pose2d(1.5, 1.0, Rotation2d.fromDegrees(0)), 
-        new Pose2d(1.5, 2.0, Rotation2d.fromDegrees(0)), 
-        new Pose2d(1.5, 3.0, Rotation2d.fromDegrees(0)), 
-        new Pose2d(1.5, 4.0, Rotation2d.fromDegrees(0))
-    };
-
-    private final Pose2d[] scoringPositionsRed = {
-        new Pose2d(20, -14, Rotation2d.fromDegrees(0)),
-        new Pose2d(20, -14, Rotation2d.fromDegrees(0)),
-        new Pose2d(20, -14, Rotation2d.fromDegrees(0)), 
-        new Pose2d(20, -14, Rotation2d.fromDegrees(0))
-    };
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -510,8 +496,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       public Pose2d[] rightBranchPosesRed = new Pose2d[6];
 
     public void generatePoseArray() {
-        Pose2d lOrgBlue = new Pose2d(3.17, 4.17, new Rotation2d(0));
-        Pose2d rOrgBlue = new Pose2d(3.17, 3.84, new Rotation2d(0));
+        Pose2d lOrgBlue = new Pose2d(3.17, 4.049, new Rotation2d(0));
+        Pose2d rOrgBlue = new Pose2d(3.17, 3.715, new Rotation2d(0));
         Translation2d centerBlue = new Translation2d(4.497, 4.025);
     
         Pose2d lOrgRed = FlippingUtil.flipFieldPose(lOrgBlue);
@@ -542,7 +528,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command driveToPose(Pose2d pose) {
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
-            1, 1,
+            2.5, 2,
             RotationsPerSecond.of(0.6).in(RadiansPerSecond), Units.degreesToRadians(720));
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
