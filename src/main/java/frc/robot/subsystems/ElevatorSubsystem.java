@@ -1,3 +1,97 @@
+// package frc.robot.subsystems;
+
+// import static edu.wpi.first.units.Units.Rotations;
+
+// import com.ctre.phoenix6.configs.Slot0Configs;
+// import com.ctre.phoenix6.configs.TalonFXConfiguration;
+// import com.ctre.phoenix6.controls.MotionMagicVoltage;
+// import com.ctre.phoenix6.hardware.TalonFX;
+// import com.ctre.phoenix6.signals.InvertedValue;
+
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import frc.robot.Configs;
+
+// public class ElevatorSubsystem extends SubsystemBase {
+//     private final TalonFX leader = new TalonFX(Configs.CAN.ElevatorRight); // main motor
+//     private final TalonFX follower = new TalonFX(Configs.CAN.ElevatorLeft); // follows leader
+
+//     // Motion Magic request object
+//     private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
+
+//     // Positions in rotations
+//     public static final double Reset  = 0;
+//     public static final double Intake = 0.9;
+//     public static final double LEVEL1 = 12.0;
+//     public static final double LEVEL2 = 20.0;
+//     public static final double LEVEL3 = 29;
+//     public static final double LEVEL4 = 49;
+//     public static final double Algae1 = 12;
+//     public static final double Algae2 = 22;
+
+//     // Tolerance for checking "at target"
+//     public static final double POSITION_TOLERANCE = 0.2;
+
+//     public ElevatorSubsystem() {
+//         TalonFXConfiguration configs = new TalonFXConfiguration();
+
+//         // Motor inversion (change if needed)
+//         configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+//         // Motion Magic PID slot
+//         Slot0Configs slot0 = configs.Slot0;
+//         slot0.kP = 6.2;   // tune!
+//         slot0.kI = 0.1;
+//         slot0.kD = 1;
+//         slot0.kV = 0.01;
+//         slot0.kS = 0.25;
+
+//         // Motion Magic settings (slowed for testing)
+//         configs.MotionMagic.MotionMagicCruiseVelocity = 42; // rotations/sec
+//         configs.MotionMagic.MotionMagicAcceleration   = 62; // rotations/sec^2
+
+//         leader.getConfigurator().apply(configs);
+
+//         // Reset encoder position to 0 whenever code boots
+//         leader.setPosition(0);
+
+//         // Follower follows leader (invert true if mounted opposite)
+//         follower.setControl(new com.ctre.phoenix6.controls.Follower(
+//             Configs.CAN.ElevatorRight, true
+//         ));
+//     }
+
+//     /** Move elevator to given target rotations */
+//     public void setPosition(double rotations) {
+//         leader.setControl(motionMagic.withPosition(rotations));
+//     }
+
+//     /** Stop elevator immediately */
+//     public void stop() {
+//         leader.stopMotor();
+//     }
+
+//     /** Force reset encoder position to zero */
+//     public void setZero() {
+//         leader.setPosition(0);
+//     }
+
+//     /** Read current position in rotations */
+//     public double getPosition() {
+//         return leader.getRotorPosition().getValue().in(Rotations);
+//     }
+
+//     /** Returns true if elevator is within tolerance of target */
+//     public boolean atTarget(double target) {
+//         return Math.abs(getPosition() - target) <= POSITION_TOLERANCE;
+//     }
+
+//     /** Returns true if at physical bottom (safe to zero) */
+//     public boolean atBottom() {
+//         return getPosition() <= Reset + POSITION_TOLERANCE;
+//     }
+// }
+
+
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Rotations;
@@ -15,6 +109,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 
@@ -26,25 +121,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     // private static final double SENSOR_TO_MECH_RATIO = 10.0; // TODO tune or comment out if you’d rather stay in motor rot units
 
     // PIDF (regular Motion Magic, not Expo)
-    private static final double kS = 0.25;   // V, static
-    private static final double kV = 9.5;   // V per rps
-    private static final double kA = 0.2;   // V per rps^2
-    private static final double kP = 0.0;
+    private static final double kP = 0.1;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
 
-    // Gravity feedforward so it holds position without fighting with P
-    private static final double kG = 0.5;    // V to hold. Start ~0.3–0.8, tune on-robot
-
     // Motion Magic constraints
-    private static final double CRUISE_VEL_RPS = 5.5;   // rot/s
-    private static final double ACCEL_RPS2    = 5.5;   // rot/s^2
-    private static final double JERK_RPS3     = 800.0;   // rot/s^3 start conservative; try 1200–1600 if you want snappier ramps
+    private static final double CRUISE_VEL_RPS = 1;   // rot/s
+    private static final double ACCEL_RPS2    = 1;   // rot/s^2
+    private static final double JERK_RPS3     = 30;   // rot/s^3 start conservative; try 1200–1600 if you want snappier ramps
 
     // Position presets (in rotations of the configured unit)
     public static final double Reset  = 0.0;
     public static final double Intake = 0.9;
-    public static final double LEVEL1 = 12.0;
+    public static final double LEVEL1 = 5;
     public static final double LEVEL2 = 20.0;
     public static final double LEVEL3 = 29.0;
     public static final double LEVEL4 = 49.0;
@@ -53,10 +142,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public static final double POSITION_TOLERANCE = 0.20;
 
+    private double lastSetpointRot = 0.0;
+
     // ======= hardware =======
     private final TalonFX leader = new TalonFX(Configs.CAN.ElevatorRight);
     private final TalonFX follower = new TalonFX(Configs.CAN.ElevatorLeft);
     private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
+    
 
     public ElevatorSubsystem() {
         TalonFXConfiguration cfg = new TalonFXConfiguration();
@@ -84,13 +176,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Slot 0 gains
         Slot0Configs s0 = cfg.Slot0;
-        s0.kS = kS;
-        s0.kV = kV;
-        s0.kA = kA;
         s0.kP = kP;
         s0.kI = kI;
         s0.kD = kD;
-        s0.kG = kG;
         s0.GravityType = GravityTypeValue.Elevator_Static;
 
         // Motion Magic constraints
@@ -100,6 +188,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         mm.MotionMagicJerk           = JERK_RPS3;
 
         // Apply to leader
+        cfg.Feedback.SensorToMechanismRatio=5;
         leader.getConfigurator().apply(cfg);
 
         // Zero position on boot (use a homing routine if you have a hard bottom switch)
@@ -112,6 +201,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     /** Move elevator to target position (in configured rotations) */
     public void setPosition(double rotations) {
+        lastSetpointRot = rotations;
         leader.setControl(motionMagic.withPosition(rotations));
     }
 
@@ -138,6 +228,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     /** At bottom based on position. Swap to a limit switch if you have one */
     public boolean atBottom() {
         return getPosition() <= Reset + POSITION_TOLERANCE;
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Elevator/Current Position (rot)", getPosition());
+        SmartDashboard.putNumber("Elevator/Setpoint (rot)", lastSetpointRot);
+        SmartDashboard.putBoolean("Elevator/At Target", atTarget(lastSetpointRot));
+
+        SmartDashboard.putNumber("Elevator/Velocity (rps)",
+            leader.getRotorVelocity().getValue().in(edu.wpi.first.units.Units.RotationsPerSecond));
+        SmartDashboard.putNumber("Elevator/Supply Current (A)",
+            leader.getSupplyCurrent().getValueAsDouble());
     }
 
     // ======= optional: quick homing helper if you add a limit switch =======
