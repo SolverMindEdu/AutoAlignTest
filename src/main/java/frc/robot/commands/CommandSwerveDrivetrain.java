@@ -496,8 +496,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       public Pose2d[] rightBranchPosesRed = new Pose2d[6];
 
     public void generatePoseArray() {
-        Pose2d lOrgBlue = new Pose2d(3.17, 4.049, new Rotation2d(0));
-        Pose2d rOrgBlue = new Pose2d(3.17, 3.715, new Rotation2d(0));
+        Pose2d lOrgBlue = new Pose2d(3.2, 4.01, new Rotation2d(0));
+        Pose2d rOrgBlue = new Pose2d(3.2, 3.623, new Rotation2d(0));
         Translation2d centerBlue = new Translation2d(4.497, 4.025);
     
         Pose2d lOrgRed = FlippingUtil.flipFieldPose(lOrgBlue);

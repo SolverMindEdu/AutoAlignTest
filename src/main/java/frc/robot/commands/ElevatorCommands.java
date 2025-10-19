@@ -6,10 +6,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevatorCommands {
+
+    // Reset elevator to bottom and zero encoder
     public static Command reset(ElevatorSubsystem elevator) {
         return Commands.sequence(
             new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.Reset), elevator),
-            new WaitForElevatorCommand(elevator, ElevatorSubsystem.Reset),
             new InstantCommand(() -> {
                 if (elevator.atBottom()) {
                     elevator.setZero(); // snap encoder to 0
@@ -18,53 +19,36 @@ public class ElevatorCommands {
         );
     }
 
-    public static Command intake(ElevatorSubsystem elevator) {
-        return Commands.sequence(
-            new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.Intake), elevator),
-            new WaitForElevatorCommand(elevator, ElevatorSubsystem.Intake)
-        );
-    }
-
     public static Command goToLevel1(ElevatorSubsystem elevator) {
-        return Commands.sequence(
-            new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.LEVEL1), elevator),
-            new WaitForElevatorCommand(elevator, ElevatorSubsystem.LEVEL1)
-        );
+        return new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.LEVEL1), elevator);
     }
 
     public static Command goToLevel2(ElevatorSubsystem elevator) {
-        return Commands.sequence(
-            new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.LEVEL2), elevator),
-            new WaitForElevatorCommand(elevator, ElevatorSubsystem.LEVEL2)
-        );
+        return new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.LEVEL2), elevator);
     }
 
     public static Command goToLevel3(ElevatorSubsystem elevator) {
-        return Commands.sequence(
-            new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.LEVEL3), elevator),
-            new WaitForElevatorCommand(elevator, ElevatorSubsystem.LEVEL3)
-        );
+        return new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.LEVEL3), elevator);
     }
 
     public static Command goToLevel4(ElevatorSubsystem elevator) {
-        return Commands.sequence(
-            new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.LEVEL4), elevator),
-            new WaitForElevatorCommand(elevator, ElevatorSubsystem.LEVEL4)
-        );
+        return new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.LEVEL4), elevator);
     }
 
     public static Command Algae1(ElevatorSubsystem elevator) {
-        return Commands.sequence(
-            new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.Algae1), elevator),
-            new WaitForElevatorCommand(elevator, ElevatorSubsystem.Algae1)
-        );
+        return new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.Algae1), elevator);
     }
 
     public static Command Algae2(ElevatorSubsystem elevator) {
-        return Commands.sequence(
-            new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.Algae2), elevator),
-            new WaitForElevatorCommand(elevator, ElevatorSubsystem.Algae2)
-        );
+        return new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.Algae2), elevator);
+    }
+
+    public static Command AlgaeGround(ElevatorSubsystem elevator) {
+        return new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.AlgaeGround), elevator);
+    }
+
+    public static Command goBarge(ElevatorSubsystem elevator) {
+        return new InstantCommand(() -> elevator.setPosition(ElevatorSubsystem.Barge), elevator);
     }
 
     public static InstantCommand stop(ElevatorSubsystem elevator) {

@@ -1,0 +1,232 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorL3"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.53
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreAlgae"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunEE"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.6
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StopEE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StowAlgae"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.3
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ResetELEVATOR"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftIntake"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeRollers"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunEEIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeSensor"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SlowIntakeRollers"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "EESensor"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StopEE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StopIntakeRollers"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorL3"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.75
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreAlgae"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunEE"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.6
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StopEE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StowAlgae"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.3
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ResetELEVATOR"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
