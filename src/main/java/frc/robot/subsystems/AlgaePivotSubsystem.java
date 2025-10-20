@@ -19,6 +19,7 @@ public class AlgaePivotSubsystem extends SubsystemBase {
     // Example pivot angles in rotations (tune these!)
     public static final double RESET = 0.1;
     public static final double RunEE = 1.4;
+    public static final double AlgaeEERun = 2.5;
     public static final double level1 = 16;
     public static final double ElevatorMove = 0.9;
     public static final double Algae = 8;

@@ -32,7 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public static final double LEVEL4 = 48.0;
     public static final double Algae1 = 15.0;
     public static final double Algae2 = 22;
-    public static final double Barge = 51.0;
+    public static final double Barge = 50.0;
     public static final double AlgaeGround = 5;
 
     // limits + tolerance 
@@ -62,8 +62,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         slot0.GravityType = GravityTypeValue.Elevator_Static;
 
         // Motion Magic constraints
-        configs.MotionMagic.MotionMagicCruiseVelocity = 39;  // rot/s
-        configs.MotionMagic.MotionMagicAcceleration   = 35;  // rot/s^2
+        configs.MotionMagic.MotionMagicCruiseVelocity = 43  ;  // rot/s
+        configs.MotionMagic.MotionMagicAcceleration   = 47;  // rot/s^2
         configs.MotionMagic.MotionMagicJerk           = 800; // rot/s^3, shapes start/stop smoothness
 
         // reverse soft limit so it can’t command below the floor

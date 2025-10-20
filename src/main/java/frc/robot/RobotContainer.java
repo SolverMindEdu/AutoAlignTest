@@ -89,7 +89,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
             autoChooser = AutoBuilder.buildAutoChooser();
             SmartDashboard.putData("Auto Chooser", autoChooser);
         }
-
+ 
         private void configureBindings() {
             // Note that X is defined as forward according to WPILib convention,
             // and Y is defined as to the left according to WPILib convention.
@@ -135,7 +135,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
                     SensorRangeCommands.waitForIntake(intakeRange, 0, 280),
                     IntakeRollersCommands.run(intakeRollers, 0.15),
                     SensorRangeCommands.waitForCoral(eeCoral, 0, 100),
-                    Commands.waitSeconds(0.15),
+                    Commands.waitSeconds(0.1),
                     EndEffectorCommands.stop(endEffector),
                     IntakeRollersCommands.stop(intakeRollers),
                     AlgaePivotCommands.stow(algaepivot)
@@ -383,7 +383,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
                               }
                               case 1 -> {
                                 Commands.sequence(
-                                    AlgaePivotCommands.runEE(algaepivot),
+                                    AlgaePivotCommands.AlgaeEErun(algaepivot),
                                     IntakeRollersCommands.stop(intakeRollers),
                                     EndEffectorCommands.run(endEffector, -0.3),
                                     Commands.waitSeconds(1),
@@ -413,7 +413,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
                               }
                               case 1 -> {
                                 Commands.sequence(
-                                    AlgaePivotCommands.runEE(algaepivot),
+                                    AlgaePivotCommands.AlgaeEErun(algaepivot),
                                     IntakeRollersCommands.stop(intakeRollers),
                                     EndEffectorCommands.run(endEffector, -0.3),
                                     Commands.waitSeconds(1),
