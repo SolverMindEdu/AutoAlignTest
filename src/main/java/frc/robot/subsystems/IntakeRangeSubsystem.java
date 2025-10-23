@@ -7,12 +7,15 @@ import frc.robot.Configs;
 public class IntakeRangeSubsystem extends SubsystemBase {
     private final CANrange sensor = new CANrange(Configs.CAN.IntakeDetect);
 
-    public double getDistanceMillimeters() {
-        return sensor.getDistance().getValueAsDouble() * 1000.0;
+    public double getDistanceMeters() {
+        return sensor.getDistance().getValueAsDouble(); // meters
     }
-
-    public boolean isWithinRange(double minMm, double maxMm) {
-        double dist = getDistanceMillimeters();
-        return dist >= minMm && dist <= maxMm;
+    
+    public boolean isWithinRange(double minMeters, double maxMeters) {
+        // auto-fix swapped bounds
+        double lo = Math.min(minMeters, maxMeters);
+        double hi = Math.max(minMeters, maxMeters);
+        double d = getDistanceMeters();
+        return d >= lo && d <= hi;
     }
 }

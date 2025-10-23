@@ -334,6 +334,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
 
+
     // @Override
     // public void periodic() {
     //     SmartDashboard.putData("Pose Heading (deg)", m_gyro);
@@ -528,7 +529,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command driveToPose(Pose2d pose) {
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
-            2.5, 2,
+            3, 2.5,
             RotationsPerSecond.of(0.6).in(RadiansPerSecond), Units.degreesToRadians(720));
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands

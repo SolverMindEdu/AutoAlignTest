@@ -17,13 +17,13 @@ public class AlgaePivotSubsystem extends SubsystemBase {
     private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
 
     // Example pivot angles in rotations (tune these!)
-    public static final double RESET = 0.1;
+    public static final double RESET = 0.35;
     public static final double RunEE = 1.4;
     public static final double AlgaeEERun = 2.5;
     public static final double level1 = 16;
-    public static final double ElevatorMove = 0.9;
     public static final double Algae = 8;
     public static final double algaeground = 15;
+    public static final double l2algae = 6;
 
     public AlgaePivotSubsystem() {
         TalonFXConfiguration configs = new TalonFXConfiguration();

@@ -12,10 +12,6 @@ public class AlgaePivotCommands {
         return new InstantCommand(() -> algae.setPosition(AlgaePivotSubsystem.RunEE), algae);
     }
 
-    public static InstantCommand elevatorMove(AlgaePivotSubsystem algae) {
-        return new InstantCommand(() -> algae.setPosition(AlgaePivotSubsystem.ElevatorMove), algae);
-    }
-
     public static InstantCommand level1(AlgaePivotSubsystem algae) {
         return new InstantCommand(() -> algae.setPosition(AlgaePivotSubsystem.level1), algae);
     }
@@ -30,6 +26,10 @@ public class AlgaePivotCommands {
 
     public static InstantCommand AlgaeEErun(AlgaePivotSubsystem algae) {
         return new InstantCommand(() -> algae.setPosition(AlgaePivotSubsystem.AlgaeEERun), algae);
+    }
+
+    public static InstantCommand l2Algae(AlgaePivotSubsystem algae) {
+        return new InstantCommand(() -> algae.setPosition(AlgaePivotSubsystem.l2algae), algae);
     }
 
     public static InstantCommand stop(AlgaePivotSubsystem algae) {
